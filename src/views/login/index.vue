@@ -3,12 +3,12 @@
   每个表单都必须使用 el-from-item 组件包裹
   -->
   <div class="login-container">
-    <el-form class="login-style" ref="form" :model="user">
+    <el-form ref="login-from" class="login-style" :model="user" :rules="fromRules">
       <div class="login-header"></div>
-  <el-form-item class="top">
+  <el-form-item prop="mobile"  class="top">
     <el-input v-model="user.mobile" placeholder="请输入手机号"></el-input>
   </el-form-item>
-  <el-form-item >
+  <el-form-item prop="code">
   <el-input v-model="user.code" placeholder="请输入验证码"></el-input>
   </el-form-item>
   <el-form-item>
@@ -32,24 +32,47 @@ export default {
         mobile: '',
         code: ''
       },
-      checked: true, // 是否同意协议的选中状态
-      loding: false // 登录的loading状态
+      checked: false, // 是否同意协议的选中状态
+      loding: false, // 登录的loading状态
+      fromRules: {
+        mobile: [
+          // 要验证的数据名称
+          { required: true, message: '手机号不能为空', trigger: 'change' },
+          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '请输入正确手机号格式', trigger: 'change' }
+        ],
+        code: [
+          // 要验证的数据名称
+          { required: true, message: '验证码不能为空', trigger: 'change' },
+          { pattern: /^\d{6}$/, message: '请输入正确验证码格式', trigger: 'change' }
+        ]
+      }
     }
   },
   methods: {
     onLoginin () {
       // 获取表单数据(根据接口要求绑定数据)
-      const user = this.user
+      // const user = this.user
       // 表单验证
-      // 验证通过,提交登录
-
+      this.$refs['login-from'].validate(vaild => {
+        // 如果表单验证失败, 停止请求提交
+        if (!vaild) {
+          return
+        }
+        // 验证通过, 请求登录
+        this.login()
+      })
+      // 处理后端响应结果
+      // 成功:XXX
+      // 失败:XXX
+    },
+    login () {
       // 开启登陆中loading
       this.loding = true
       request({
         method: 'POST',
         url: '/mp/v1_0/authorizations',
         // data用来设置请求体
-        data: user
+        data: this.user
       }).then(res => {
         // 登录成功
         console.log(res)
@@ -66,9 +89,6 @@ export default {
         // 关闭loading
         this.loding = false
       })
-      // 处理后端响应结果
-      // 成功:XXX
-      // 失败:XXX
     }
 
   }
