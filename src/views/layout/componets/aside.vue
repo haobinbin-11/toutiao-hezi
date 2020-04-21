@@ -8,7 +8,6 @@
       active-text-color="#ffd04b"
       router
       class="nav-menu">
-        <div class="bj"></div>
       <el-menu-item index="/">
         <i class="iconfont icon-home"></i>
         <span slot="title">首页</span>
@@ -82,9 +81,6 @@ export default {
 }
 .main {
   background-color: #e9eef3;
-}
-.bj {
-  background-image: url(./logo_admin.png) no-repeat;
 }
 .nav-menu {
   .iconfont {

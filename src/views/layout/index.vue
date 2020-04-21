@@ -10,8 +10,8 @@
         </div>
         <el-dropdown>
       <div class="avatar-wrap">
-        <img class="avatar" src="http://b-ssl.duitang.com/uploads/item/201704/10/20170410095843_SEvMy.thumb.700_0.jpeg" alt="">
-        <span>用户昵称</span>
+        <img class="avatar" :src="user.photo" alt="">
+        <span>{{ user.name }}</span>
         <i class="el-icon-arrow-down"></i>
       </div>
   <el-dropdown-menu slot="dropdown">
@@ -33,6 +33,7 @@
 </template>
 <script>
 import AppAside from './componets/aside'
+import { getUserProfile } from '@/APi/user'
 export default {
   name: 'LayoutIndex',
   components: {
@@ -40,17 +41,25 @@ export default {
   },
   props: {},
   data () {
-    return {}
+    return {
+      user: {} // 当前登录用户信息
+    }
   },
   computed: {
   },
   watch: {
   },
   created () {
+    this.loadUserProfile()
   },
   mounted () {
   },
   methods: {
+    loadUserProfile () {
+      getUserProfile().then(res => {
+        this.user = res.data.data
+      })
+    }
   }
 }
 </script>
