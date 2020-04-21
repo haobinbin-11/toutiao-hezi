@@ -3,7 +3,24 @@
   <el-container class="layout-container">
   <el-aside class="aside" width="200px" ><app-aside class="aside-menu"></app-aside></el-aside>
   <el-container>
-    <el-header class="header">Header</el-header>
+    <el-header class="header">
+        <div>
+        <i class="el-icon-s-fold"></i>
+        <span>江苏传智播客科技教育有限公司</span>
+        </div>
+        <el-dropdown>
+      <div class="avatar-wrap">
+        <img class="avatar" src="http://b-ssl.duitang.com/uploads/item/201704/10/20170410095843_SEvMy.thumb.700_0.jpeg" alt="">
+        <span>用户昵称</span>
+        <i class="el-icon-arrow-down"></i>
+      </div>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item class="el-icon-setting">设置</el-dropdown-item>
+    <el-dropdown-item class="el-icon-unlock">退出</el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown>
+
+        </el-header>
     <el-main class="main"><router-view></router-view></el-main>
   </el-container>
 </el-container>
@@ -53,9 +70,23 @@ export default {
   }
 }
 .header {
-  background-color: #b3c0d1;
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
 }
 .main {
   background-color: #e9eef3;
+}
+.avatar-wrap {
+    display: flex;
+    align-items: center;
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 5px;
+    }
 }
 </style>>
