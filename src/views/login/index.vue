@@ -11,8 +11,8 @@
   <el-form-item prop="code">
   <el-input v-model="user.code" placeholder="请输入验证码"></el-input>
   </el-form-item>
-  <el-form-item>
-    <el-checkbox v-model="checked">我已阅读并同意用户协议和隐私条款</el-checkbox>
+  <el-form-item prop="agree">
+    <el-checkbox v-model="user.agree">我已阅读并同意用户协议和隐私条款</el-checkbox>
   </el-form-item>
   <el-form-item>
     <el-button class="login-btn"  type="primary" @click="onLoginin" :loading="loding">登录</el-button>
@@ -30,9 +30,9 @@ export default {
     return {
       user: {
         mobile: '',
-        code: ''
+        code: '',
+        agree: false // 是否同意协议的选中
       },
-      checked: false, // 是否同意协议的选中状态
       loding: false, // 登录的loading状态
       fromRules: {
         mobile: [
@@ -44,6 +44,22 @@ export default {
           // 要验证的数据名称
           { required: true, message: '验证码不能为空', trigger: 'change' },
           { pattern: /^\d{6}$/, message: '请输入正确验证码格式', trigger: 'change' }
+        ],
+        agree: [
+          // 自定义校验规则
+          // 验证通过: callback()
+          // 验证失败: callback(new Error('错误消息))
+          // false: 验证失败
+          {
+            validator: (rule, value, callback) => {
+              if (value) {
+                callback()
+              } else {
+                callback(new Error('请勾选同意用户协议'))
+              }
+            },
+            trigger: 'change'
+          }
         ]
       }
     }
