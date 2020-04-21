@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Layout',
+    // name: 'Layout',
     component: Layout,
     children: [
       {
