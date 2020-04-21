@@ -49,16 +49,21 @@ export default {
       }).then(res => {
         // 登录成功
         console.log(res)
+        this.$message({
+          message: '登录成功',
+          type: 'success'
+        })
       }).catch(err => {
         // 登录失败
         console.log('登录失败', err)
+        this.$message.error('登录失败，手机号或验证码错误')
       })
       // 处理后端响应结果
       // 成功:XXX
       // 失败:XXX
     }
-  }
 
+  }
 }
 </script>
 
