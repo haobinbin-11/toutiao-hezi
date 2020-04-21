@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import request from '@/utils/request'
+import { login } from '@/APi/user'
 export default {
   name: 'LoginIndex',
   components: {},
@@ -84,12 +84,13 @@ export default {
     login () {
       // 开启登陆中loading
       this.loding = true
-      request({
-        method: 'POST',
-        url: '/mp/v1_0/authorizations',
-        // data用来设置请求体
-        data: this.user
-      }).then(res => {
+
+      // 对于代码中的请求操作
+      // 1. 接口请求可能需要重用
+      // 2. 实际工作中, 接口非常容易变动, 改起来麻烦
+      // 我们建议的做法是吧所有的请求都封装成函数然后统一的组织到模块中进行管理
+      // 这样好处 :管理维护方便 也好重用
+      login(this.user).then(res => {
         // 登录成功
         console.log(res)
         this.$message({
