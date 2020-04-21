@@ -29,8 +29,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '',
-        code: '',
+        mobile: '13911111111',
+        code: '246810',
         agree: false // 是否同意协议的选中
       },
       loding: false, // 登录的loading状态
@@ -99,6 +99,10 @@ export default {
         })
         // 关闭loading
         this.loding = false
+        // 跳转到首页
+        this.$router.push({
+          name: 'home'
+        })
       }).catch(err => {
         // 登录失败
         console.log('登录失败', err)

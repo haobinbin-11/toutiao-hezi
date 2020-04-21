@@ -7,8 +7,8 @@ import VueRouter from 'vue-router'
 // 注意 @就是 src 路径 后面别忘了写那个斜杠
 // 使用建议   如果加载的资源路径就在当前目录下 正常写
 //        如果需要进行父级路径查找的 都使用 @
-import Login from '@/views/login'
-
+import Login from '@/views/login/'
+import Home from '@/views/home/'
 Vue.use(VueRouter)
 
 // 路由配置表
@@ -17,6 +17,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/',
+    // 路由的名字是干啥的
+    name: 'home',
+    component: Home
   }
 ]
 
