@@ -15,7 +15,7 @@
     <el-checkbox v-model="checked">我已阅读并同意用户协议和隐私条款</el-checkbox>
   </el-form-item>
   <el-form-item>
-    <el-button class="login-btn" type="primary" @click="onLoginin">登录</el-button>
+    <el-button class="login-btn"  type="primary" @click="onLoginin" :loading="loding">登录</el-button>
   </el-form-item>
 </el-form>
   </div>
@@ -32,7 +32,8 @@ export default {
         mobile: '',
         code: ''
       },
-      checked: true // 是否同意协议的选中状态
+      checked: true, // 是否同意协议的选中状态
+      loding: false // 登录的loading状态
     }
   },
   methods: {
@@ -41,6 +42,9 @@ export default {
       const user = this.user
       // 表单验证
       // 验证通过,提交登录
+
+      // 开启登陆中loading
+      this.loding = true
       request({
         method: 'POST',
         url: '/mp/v1_0/authorizations',
@@ -53,10 +57,14 @@ export default {
           message: '登录成功',
           type: 'success'
         })
+        // 关闭loading
+        this.loding = false
       }).catch(err => {
         // 登录失败
         console.log('登录失败', err)
         this.$message.error('登录失败，手机号或验证码错误')
+        // 关闭loading
+        this.loding = false
       })
       // 处理后端响应结果
       // 成功:XXX
