@@ -9,6 +9,7 @@ import VueRouter from 'vue-router'
 //        如果需要进行父级路径查找的 都使用 @
 import Login from '@/views/login/'
 import Home from '@/views/home/'
+import Layout from '@/views/layout/'
 Vue.use(VueRouter)
 
 // 路由配置表
@@ -20,9 +21,16 @@ const routes = [
   },
   {
     path: '/',
-    // 路由的名字是干啥的
-    name: 'home',
-    component: Home
+    name: 'Layout',
+    component: Layout,
+    children: [
+      {
+        path: '', // path 为空,会作为默认子路由
+        // 路由的名字是干啥的
+        name: 'home',
+        component: Home
+      }
+    ]
   }
 ]
 
