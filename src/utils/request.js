@@ -32,4 +32,20 @@ export default request
 // 谁要使用谁就加载 request 模块
 
 // 请求拦截器
+request.interceptors.request.use(function (config) {
+  const user = JSON.parse(window.localStorage.getItem('user'))
+  // 如果有登录用户信息, 则统一设置token
+  if (user) {
+    config.headers.Authorization = `Bearer ${user.token}`
+  }
+  return config
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error)
+})
 // 响应拦截器
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  return Promise.reject(error)
+})

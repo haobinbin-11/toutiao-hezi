@@ -1,11 +1,11 @@
 <template>
   <!-- <div class="home-container"> -->
   <el-container class="layout-container">
-  <el-aside class="aside" width="200px" ><app-aside class="aside-menu"></app-aside></el-aside>
+  <el-aside class="aside" width="auto" ><app-aside class="aside-menu" :is-collapse="isCollapse"></app-aside></el-aside>
   <el-container>
     <el-header class="header">
         <div>
-        <i class="el-icon-s-fold"></i>
+        <i :class="{ 'el-icon-s-fold' : isCollapse, 'el-icon-s-unfold' : !isCollapse}" @click="isCollapse = !isCollapse"></i>
         <span>江苏传智播客科技教育有限公司</span>
         </div>
         <el-dropdown>
@@ -42,7 +42,8 @@ export default {
   props: {},
   data () {
     return {
-      user: {} // 当前登录用户信息
+      user: {}, // 当前登录用户信息
+      isCollapse: false // 侧边栏展示状态
     }
   },
   computed: {
@@ -55,6 +56,8 @@ export default {
   mounted () {
   },
   methods: {
+    // 除了登录接口, 其他接口都需要授权才能请求使用
+    // 或者说,除了登录接口, 其他接口都需要省份令牌才能获取数据
     loadUserProfile () {
       getUserProfile().then(res => {
         this.user = res.data.data
@@ -80,7 +83,6 @@ export default {
 }
 .header {
   display: flex;
-  height: 60px;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #ccc;

@@ -37,13 +37,13 @@ export default {
       fromRules: {
         mobile: [
           // 要验证的数据名称
-          { required: true, message: '手机号不能为空', trigger: 'change' },
-          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '请输入正确手机号格式', trigger: 'change' }
+          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '请输入正确手机号格式', trigger: 'blur' }
         ],
         code: [
           // 要验证的数据名称
-          { required: true, message: '验证码不能为空', trigger: 'change' },
-          { pattern: /^\d{6}$/, message: '请输入正确验证码格式', trigger: 'change' }
+          { required: true, message: '验证码不能为空', trigger: 'blur' },
+          { pattern: /^\d{6}$/, message: '请输入正确验证码格式', trigger: 'blur' }
         ],
         agree: [
           // 自定义校验规则
@@ -51,6 +51,8 @@ export default {
           // 验证失败: callback(new Error('错误消息))
           // false: 验证失败
           {
+          // validator 验证函数不是你来调用的, 而是当 element 表单触发验证的时候它会自己内部调用
+          // 所以你只需要提供校验函数的处理逻辑就可以
             validator: (rule, value, callback) => {
               if (value) {
                 callback()
@@ -99,6 +101,11 @@ export default {
         })
         // 关闭loading
         this.loding = false
+
+        // 将接口返回的用户相关数据存储到本地存储, 方便应用数据共享
+        // 本地存储只能存储字符串
+        // 如果想存储对象 数组 把他们转为json 格式字符串进行存储
+        window.localStorage.setItem('user', JSON.stringify(res.data.data))
         // 跳转到首页
         this.$router.push({
           name: 'home'
