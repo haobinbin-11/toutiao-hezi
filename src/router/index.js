@@ -10,6 +10,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login/'
 import Home from '@/views/home/'
 import Layout from '@/views/layout/'
+import Article from '@/views/article/'
 Vue.use(VueRouter)
 
 // 路由配置表
@@ -29,6 +30,11 @@ const routes = [
         // 路由的名字是干啥的
         name: 'home',
         component: Home
+      },
+      {
+        path: '/article',
+        name: 'article',
+        component: Article
       }
     ]
   }

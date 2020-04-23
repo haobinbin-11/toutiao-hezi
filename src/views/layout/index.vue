@@ -66,7 +66,7 @@ export default {
       })
     },
     onLogout () {
-      this.$confirm('是否要退出?', '提示', {
+      this.$confirm('是否要退出?', '退出提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
