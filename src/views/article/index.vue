@@ -71,6 +71,13 @@
       </el-table-column>
     </el-table>
 <!-- 数据列表 -->
+<!-- 分页设置 -->
+<el-pagination
+    background
+    layout="prev, pager, next"
+    :total="1000">
+  </el-pagination>
+<!-- 分页设置 -->
   </div>
 </template>
 
