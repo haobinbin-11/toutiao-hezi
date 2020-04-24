@@ -79,6 +79,15 @@
       <el-table-column
         prop="cover"
         label="封面">
+        <template slot-scope="scope">
+          <img v-if="scope.row.cover.images[0]" class="article-cover" :src="scope.row.cover.images[0]" alt="">
+          <img v-else src="./no-cover.gif" class="article-cover" alt="">
+        </template>
+        <!-- 下面这种情况是在运行期间动态改变处理的
+        而本地图片必须在打包的时候就存在 -->
+        <!-- <template slot-scope="scope">
+          <img class="article-cover" :src="scope.row.cover.images[0] || 'no-cover.gif'" alt="">
+        </template> -->
       </el-table-column>
       <el-table-column
         prop="title"
@@ -188,5 +197,10 @@ export default {
 }
 .list-table {
   margin-bottom: 30px;
+}
+.article-cover{
+  width: 80px;
+  height: 80px;
+  background-size: cover;
 }
 </style>
