@@ -1,14 +1,17 @@
 <template>
   <div class="article-container">
-      <!-- 面包屑路径导航 -->
+    <el-card class="top-card">
+  <div slot="header" class="clearfix">
+    <span>      <!-- 面包屑路径导航 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
   <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
   <el-breadcrumb-item>内容管理</el-breadcrumb-item>
 </el-breadcrumb>
-<!-- 面包屑路径导航 -->
-
-<!-- 数据筛选表单 -->
-<el-form ref="form" :model="form" label-width="80px">
+<!-- 面包屑路径导航 --></span>
+  </div>
+  <div class="text item">
+    <!-- 数据筛选表单 -->
+<el-form size="mini" ref="form" :model="form" label-width="40px">
   <el-form-item label="状态">
     <el-radio-group v-model="form.resource">
       <el-radio label="全部"></el-radio>
@@ -35,8 +38,8 @@
       <el-option label="WEB" value="web"></el-option>
     </el-select>
   </el-form-item>
-  <el-form-item label="活动时间">
-<el-date-picker
+  <el-form-item label="日期">
+    <el-date-picker
       v-model="form.date1"
       type="datetimerange"
       start-placeholder="开始日期"
@@ -49,10 +52,19 @@
   </el-form-item>
 </el-form>
 <!-- 数据筛选表单 -->
-<!-- 数据列表 -->
+
+  </div>
+</el-card>
+<el-card class="box-card">
+  <div slot="header" class="clearfix">
+    <span>根筛选条件查询到153658条结果</span>
+  </div>
+  <div class="text item">
+    <!-- 数据列表 -->
 <el-table
+      class="list-table"
       stripe
-      border
+      size="mini"
       :data="tableData"
       style="width: 100%">
       <el-table-column
@@ -78,6 +90,9 @@
     :total="1000">
   </el-pagination>
 <!-- 分页设置 -->
+  </div>
+</el-card>
+
   </div>
 </template>
 
@@ -127,4 +142,11 @@ export default {
   }
 }
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.top-card {
+  margin-bottom: 25px;
+}
+.list-table {
+  margin-bottom: 30px;
+}
+</style>
