@@ -87,6 +87,18 @@
       <el-table-column
         prop="status"
         label="状态">
+        <!-- 容需要在自定义模板中获取当前遍历项数据
+        那么 就在template上声明 slot-scope="scope"
+        -->
+        <template slot-scope="scope">
+          <div>
+            <el-tag v-if="scope.row.status === 0">草稿</el-tag>
+            <el-tag v-if="scope.row.status === 1" type="info">待审核</el-tag>
+            <el-tag v-if="scope.row.status === 2" type="success">审核通过</el-tag>
+            <el-tag v-if="scope.row.status === 3" type="warning">审核失败</el-tag>
+            <el-tag v-if="scope.row.status === 4" type="danger">已删除</el-tag>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="pubdate"
