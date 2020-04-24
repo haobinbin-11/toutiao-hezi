@@ -13,13 +13,14 @@
     <!-- 数据筛选表单 -->
 <el-form size="mini" ref="form" :model="form" label-width="40px">
   <el-form-item label="状态">
-    <el-radio-group v-model="form.resource">
-      <el-radio label="全部"></el-radio>
-      <el-radio label="草稿"></el-radio>
-      <el-radio label="待审核"></el-radio>
-      <el-radio label="审核通过"></el-radio>
-      <el-radio label="审核失败"></el-radio>
-      <el-radio label="已删除"></el-radio>
+    <!-- el-radio 默认把 label 作为文本和 value值 -->
+    <el-radio-group v-model="status">
+      <el-radio :label="null">全部</el-radio>
+      <el-radio :label="0">草稿</el-radio>
+      <el-radio :label="1">待审核</el-radio>
+      <el-radio :label="2">审核通过</el-radio>
+      <el-radio :label="3">审核失败</el-radio>
+      <el-radio :label="4">已删除</el-radio>
     </el-radio-group>
   </el-form-item>
   <el-form-item label="频道">
@@ -48,7 +49,10 @@
     </el-date-picker>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">筛选</el-button>
+    <!-- button 按钮 click事件 有一个 默认参数
+    当你没有指定参数时 它会默认传递一个没用的数据
+    -->
+    <el-button type="primary" @click="loadArticles(1)">查询</el-button>
   </el-form-item>
 </el-form>
 <!-- 数据筛选表单 -->
@@ -57,7 +61,7 @@
 </el-card>
 <el-card class="box-card">
   <div slot="header" class="clearfix">
-    <span>根筛选条件查询到153658条结果</span>
+    <span>根筛选条件查询到{{ totalCount }}条结果</span>
   </div>
   <div class="text item">
     <!-- 数据列表 -->
@@ -174,7 +178,8 @@ export default {
         { type: 'danger', status: 4, text: '已删除' }
       ],
       totalCount: 0, // 总数据条数
-      pageSize: 10 // 每页大小
+      pageSize: 10, // 每页大小
+      status: null // 查询文章状态, 不传就是全部
     }
   },
   computed: {},
@@ -187,15 +192,13 @@ export default {
     loadArticles (page = 1) {
       getArticles({
         page,
-        per_page: this.pageSize
+        per_page: this.pageSize,
+        status: this.status
       }).then(res => {
         const { results, total_count: totalCount } = res.data.data
         this.articles = results
         this.totalCount = totalCount
       })
-    },
-    onSubmit () {
-      console.log('submit!')
     },
     oncurrentchange (page) {
       this.loadArticles(page)
