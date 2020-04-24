@@ -137,7 +137,7 @@
 <el-pagination
     background
     layout="prev, pager, next"
-    :total="1000"
+    :total=totalCount
     @current-change="oncurrentchange"
     />
 <!-- 分页设置 -->
@@ -171,7 +171,8 @@ export default {
         { type: 'success', status: 2, text: '审核通过' },
         { type: 'warning', status: 3, text: '审核失败' },
         { type: 'danger', status: 4, text: '已删除' }
-      ]
+      ],
+      totalCount: 0 // 总数据条数
     }
   },
   computed: {},
@@ -184,9 +185,11 @@ export default {
     loadArticles (page = 1) {
       getArticles({
         page,
-        per_page: 15
+        per_page: 10
       }).then(res => {
-        this.articles = res.data.data.results
+        const { results, total_count: totalCount } = res.data.data
+        this.articles = results
+        this.totalCount = totalCount
       })
     },
     onSubmit () {
