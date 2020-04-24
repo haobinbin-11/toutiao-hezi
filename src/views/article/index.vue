@@ -24,19 +24,13 @@
     </el-radio-group>
   </el-form-item>
   <el-form-item label="频道">
-    <el-select v-model="form.region" placeholder="请选择">
-      <el-option label="开发者咨询" value="shanghai"></el-option>
-      <el-option label="iOS" value="iOS"></el-option>
-      <el-option label="大数据" value="da"></el-option>
-      <el-option label="C++" value="C"></el-option>
-      <el-option label="Android" value="A"></el-option>
-      <el-option label="css" value="CSS"></el-option>
-      <el-option label="数据库" value="mysqle"></el-option>
-      <el-option label="区域链" value="QY"></el-option>
-      <el-option label="java" value="java"></el-option>
-      <el-option label="PHP" value="php"></el-option>
-      <el-option label="python" value="python"></el-option>
-      <el-option label="WEB" value="web"></el-option>
+    <el-select v-model="form.region" placeholder="请选择频道">
+      <el-option
+       :label="channel.name"
+       :value="channel.id"
+       v-for="(channel, index) in channels"
+       :key="index"
+      ></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="日期">
@@ -153,7 +147,7 @@
 </template>
 
 <script>
-import { getArticles } from '@/APi/article'
+import { getArticles, getArticleChannels } from '@/APi/article'
 export default {
   name: '',
   components: {},
@@ -179,12 +173,14 @@ export default {
       ],
       totalCount: 0, // 总数据条数
       pageSize: 10, // 每页大小
-      status: null // 查询文章状态, 不传就是全部
+      status: null, // 查询文章状态, 不传就是全部
+      channels: []
     }
   },
   computed: {},
   watch: {},
   created () {
+    this.loadChannels()
     this.loadArticles(1)
   },
   mounted () {},
@@ -202,6 +198,11 @@ export default {
     },
     oncurrentchange (page) {
       this.loadArticles(page)
+    },
+    loadChannels () {
+      getArticleChannels().then(res => {
+        this.channels = res.data.data.channels
+      })
     }
   }
 }
