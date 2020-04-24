@@ -61,25 +61,39 @@
   </div>
   <div class="text item">
     <!-- 数据列表 -->
+    <!-- table 表格组件
+    1. 把需要展示的数组列表数据绑定给 table 组件的 data 属性
+       注意: 不要 v-for 遍历 会自己遍历
+    2. 设计表格列 el-table
+        with 可以设定表格列的宽度
+        label 可以设定列的标题
+        prop 用来设定要渲染的列表项数据字段
+    -->
 <el-table
       class="list-table"
       stripe
       size="mini"
-      :data="tableData"
+      :data="articles"
       style="width: 100%">
       <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
+        prop="cover"
+        label="封面">
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+        prop="title"
+        label="标题">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="地址">
+        prop="status"
+        label="状态">
+      </el-table-column>
+      <el-table-column
+        prop="pubdate"
+        label="发布时间">
+      </el-table-column>
+      <el-table-column
+        prop="oper"
+        label="操作">
       </el-table-column>
     </el-table>
 <!-- 数据列表 -->
