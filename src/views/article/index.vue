@@ -139,6 +139,7 @@
     layout="prev, pager, next"
     :total=totalCount
     @current-change="oncurrentchange"
+    :page-size="pageSize"
     />
 <!-- 分页设置 -->
   </div>
@@ -172,7 +173,8 @@ export default {
         { type: 'warning', status: 3, text: '审核失败' },
         { type: 'danger', status: 4, text: '已删除' }
       ],
-      totalCount: 0 // 总数据条数
+      totalCount: 0, // 总数据条数
+      pageSize: 10 // 每页大小
     }
   },
   computed: {},
@@ -185,7 +187,7 @@ export default {
     loadArticles (page = 1) {
       getArticles({
         page,
-        per_page: 10
+        per_page: this.pageSize
       }).then(res => {
         const { results, total_count: totalCount } = res.data.data
         this.articles = results
