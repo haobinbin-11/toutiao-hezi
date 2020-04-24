@@ -68,6 +68,7 @@
         with 可以设定表格列的宽度
         label 可以设定列的标题
         prop 用来设定要渲染的列表项数据字段
+    3. 用自定义表格 放按钮 图片...
     -->
 <el-table
       class="list-table"
@@ -92,8 +93,21 @@
         label="发布时间">
       </el-table-column>
       <el-table-column
-        prop="oper"
         label="操作">
+        <template>
+        <el-button
+          size="mini"
+          circle
+          type="primary"
+          icon="el-icon-edit"
+        ></el-button>
+        <el-button
+          size="mini"
+          circle
+          icon="el-icon-delete"
+          type="danger"
+        ></el-button>
+      </template>
       </el-table-column>
     </el-table>
 <!-- 数据列表 -->
@@ -127,23 +141,6 @@ export default {
         resource: '',
         desc: ''
       },
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
       articles: [] // 文章数据来列表
     }
   },
