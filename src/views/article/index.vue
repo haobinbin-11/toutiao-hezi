@@ -11,7 +11,7 @@
   </div>
   <div class="text item">
     <!-- 数据筛选表单 -->
-<el-form size="mini" ref="form" :model="form" label-width="40px">
+<el-form v-loading="loading" size="mini" ref="form" :model="form" label-width="40px">
   <el-form-item label="状态">
     <!-- el-radio 默认把 label 作为文本和 value值 -->
     <el-radio-group v-model="status">
@@ -53,7 +53,7 @@
     <!-- button 按钮 click事件 有一个 默认参数
     当你没有指定参数时 它会默认传递一个没用的数据
     -->
-    <el-button type="primary" @click="loadArticles(1)">查询</el-button>
+    <el-button :disabled="loading" type="primary" @click="loadArticles(1)">查询</el-button>
   </el-form-item>
 </el-form>
 <!-- 数据筛选表单 -->
@@ -76,6 +76,7 @@
     3. 用自定义表格 放按钮 图片...
     -->
 <el-table
+      v-loading="loading"
       class="list-table"
       stripe
       size="mini"
@@ -149,6 +150,7 @@
     background
     layout="prev, pager, next"
     :total=totalCount
+    :disabled="loading"
     @current-change="oncurrentchange"
     :page-size="pageSize"
     />
@@ -189,7 +191,8 @@ export default {
       status: null, // 查询文章状态, 不传就是全部
       channels: [], // 文章频道
       channelId: null, // 查询文章频道
-      rangeDate: null // 筛选的范围日期
+      rangeDate: null, // 筛选的范围日期
+      loading: true // 表单数据加载中
     }
   },
   computed: {},
@@ -201,6 +204,8 @@ export default {
   mounted () {},
   methods: {
     loadArticles (page = 1) {
+      // 展示加载中loading
+      this.loading = true
       getArticles({
         page,
         per_page: this.pageSize,
@@ -212,6 +217,8 @@ export default {
         const { results, total_count: totalCount } = res.data.data
         this.articles = results
         this.totalCount = totalCount
+        // 关闭加载中的 loding
+        this.loading = false
       })
     },
     oncurrentchange (page) {
