@@ -154,6 +154,7 @@
     :disabled="loading"
     @current-change="oncurrentchange"
     :page-size="pageSize"
+    :current-page.sync="page"
     />
 <!-- 分页设置 -->
   </div>
@@ -193,7 +194,8 @@ export default {
       channels: [], // 文章频道
       channelId: null, // 查询文章频道
       rangeDate: null, // 筛选的范围日期
-      loading: true // 表单数据加载中
+      loading: true, // 表单数据加载中
+      page: 1
     }
   },
   computed: {},
@@ -245,6 +247,8 @@ export default {
         // 确认
         deleteArticle(articleId.toString()).then(res => {
           console.log(res)
+          // 成功 更新文章数据列表
+          this.loadArticles(this.page)
         })
       }).catch(() => {
         this.$message({
