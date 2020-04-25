@@ -82,14 +82,20 @@
         prop="cover"
         label="封面">
         <template slot-scope="scope">
-          <img v-if="scope.row.cover.images[0]" class="article-cover" :src="scope.row.cover.images[0]" alt="">
-          <img v-else src="./no-cover.gif" class="article-cover" alt="">
-        </template>
-        <!-- 下面这种情况是在运行期间动态改变处理的
-        而本地图片必须在打包的时候就存在 -->
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="scope.row.cover.images[0]"
+            :fit="cover"
+            lazy
+          >
+            <div slot="placeholder" class="image-slot"
+            >
+              加载中<span class="dot">...</span>
+            </div>
+          </el-image>
         <!-- <template slot-scope="scope">
-          <img class="article-cover" :src="scope.row.cover.images[0] || 'no-cover.gif'" alt="">
-        </template> -->
+          <img class="article-cover" :src="scope.row.cover.images[0] || 'no-cover.gif'" alt=""> -->
+        </template>
       </el-table-column>
       <el-table-column
         prop="title"
