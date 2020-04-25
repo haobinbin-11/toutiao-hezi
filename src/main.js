@@ -5,9 +5,15 @@ import router from './router'
 // 加载element样式
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// json-bigint 使用方法
+import jsonBigint from 'json-bigint'
 
 // 加载全局样式
 import './styles/insex.less'
+// json-bigint 使用方法
+const str = '{ "id": 1535135153531355315 }'
+console.log(JSON.parse(str))
+console.log(jsonBigint.parse(str).id.toString())
 // 全局注册element组件
 Vue.use(ElementUI)
 Vue.config.productionTip = false

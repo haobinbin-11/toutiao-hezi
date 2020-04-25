@@ -22,3 +22,12 @@ export const getArticleChannels = params => {
     // headers 参数使用 headers 设置
   })
 }
+// 删除文章
+export const deleteArticle = articleId => {
+  return request({
+    method: 'DELETE',
+    // 接口文档中写的路径参数需要在 url 中传递
+    // 凡是看到接口路径中有 :xxx 格式的字段, 需要传递路径参数
+    url: `/mp/v1_0/articles/${articleId}`
+  })
+}

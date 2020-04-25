@@ -21,9 +21,18 @@ import axios from 'axios'
 //   method: '',
 //   url: ''
 // })
-
+import jsonBigint from 'json-bigint'
 const request = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn/'// 请求的基础路径
+  baseURL: 'http://ttapi.research.itcast.cn/', // 请求的基础路径
+  transformResponse: [function (data) {
+    // 定义后端返回的原始数据的处理
+    // 参数data 是后端返回的原始数据(未经处理的 JSON 格式字符串)
+    try {
+      return jsonBigint.parse(data)
+    } catch (err) {
+      return data
+    }
+  }]
 })
 
 // 导出请求方法
