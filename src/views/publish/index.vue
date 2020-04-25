@@ -8,7 +8,7 @@
 </el-breadcrumb>
   </div>
   <div class="text item">
-<el-form :model="article" :rules="rules" ref="article" label-width="100px" class="demo-ruleForm">
+<el-form :model="article" :rules="rules" ref="article" label-width="100px">
   <el-form-item label="标题" prop="title">
     <el-input v-model="article.title"></el-input>
   </el-form-item>
@@ -29,8 +29,9 @@
     </el-select>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">发表</el-button>
-    <el-button @click="resetForm('ruleForm')">存入草稿</el-button>
+      <!-- 按钮 默认有一个参数 如果不写 就会传上去 -->
+    <el-button type="primary" @click="onPublish(false)">发表</el-button>
+    <el-button @click="onPublish(true)">存入草稿</el-button>
   </el-form-item>
 </el-form>
   </div>
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import { getArticleChannels } from '@/APi/article'
+import { getArticleChannels, addArticle } from '@/APi/article'
 export default {
   name: 'PublishIndex',
   components: {},
@@ -84,14 +85,13 @@ export default {
         this.channels = res.data.data.channels
       })
     },
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+    onPublish (draft = false) {
+      addArticle(this.article, draft).then(res => {
+        console.log(res)
+        this.$message({
+          message: '成功',
+          type: 'success'
+        })
       })
     },
     resetForm (formName) {
