@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getArticleChannels, addArticle } from '@/APi/article'
+import { getArticleChannels, addArticle, getArticle } from '@/APi/article'
 export default {
   name: 'PublishIndex',
   components: {},
@@ -77,6 +77,11 @@ export default {
   watch: {},
   created () {
     this.loadChannels()
+    // 发布与修改用的同一组件 要判断
+    // 路径有id 则展示文章内容
+    if (this.$route.query.id) {
+      this.loadArticle()
+    }
   },
   mounted () {},
   methods: {
@@ -96,6 +101,12 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    // 修改文章: 加载文章内容
+    loadArticle () {
+      getArticle(this.$route.query.id).then(res => {
+        this.article = res.data.data
+      })
     }
   }
 }
