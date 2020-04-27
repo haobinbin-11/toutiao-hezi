@@ -13,7 +13,7 @@
     <el-input v-model="article.title"></el-input>
   </el-form-item>
   <el-form-item label="内容" prop="content">
-    <el-input type="textarea" v-model="article.content"></el-input>
+    <el-tiptap v-model="article.content" :extensions="extensions"></el-tiptap>
   </el-form-item>
     <el-form-item label="封面" prop="cover">
     <el-radio-group v-model="article.cover.type">
@@ -41,9 +41,34 @@
 
 <script>
 import { getArticleChannels, addArticle, getArticle } from '@/APi/article'
+import {
+  ElementTiptap,
+  Doc,
+  Text,
+  Paragraph,
+  Heading,
+  Bold,
+  Underline,
+  Italic,
+  Strike,
+  ListItem,
+  BulletList,
+  OrderedList,
+  TodoItem,
+  TodoList,
+  HorizontalRule,
+  Fullscreen,
+  Preview,
+  FontType,
+  Image,
+  CodeBlock
+} from 'element-tiptap'
+import 'element-tiptap/lib/index.css'
 export default {
   name: 'PublishIndex',
-  components: {},
+  components: {
+    'el-tiptap': ElementTiptap
+  },
   props: {},
   data () {
     return {
@@ -70,7 +95,28 @@ export default {
         content: [
           { required: true, message: '请填写内容', trigger: 'blur' }
         ]
-      }
+      },
+      extensions: [
+        new Doc(),
+        new Text(),
+        new Paragraph(),
+        new Image(),
+        new Heading({ level: 3 }),
+        new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
+        new Underline(),
+        new Italic(),
+        new Strike(),
+        new ListItem(),
+        new BulletList(),
+        new OrderedList(),
+        new TodoItem(),
+        new TodoList(),
+        new HorizontalRule(),
+        new Fullscreen(),
+        new Preview(),
+        new FontType(),
+        new CodeBlock()
+      ]
     }
   },
   computed: {},
