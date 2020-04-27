@@ -13,7 +13,7 @@
     <el-input v-model="article.title"></el-input>
   </el-form-item>
   <el-form-item label="内容" prop="content">
-    <el-tiptap v-model="article.content" :extensions="extensions"></el-tiptap>
+    <el-tiptap placeholder="请输入文章内容" height="300" v-model="article.content" :extensions="extensions"></el-tiptap>
   </el-form-item>
     <el-form-item label="封面" prop="cover">
     <el-radio-group v-model="article.cover.type">
@@ -61,9 +61,12 @@ import {
   Preview,
   FontType,
   Image,
-  CodeBlock
+  CodeBlock,
+  TextColor,
+  TextHighlight
 } from 'element-tiptap'
 import 'element-tiptap/lib/index.css'
+import { uploadImage } from '@/APi/image'
 export default {
   name: 'PublishIndex',
   components: {
@@ -100,7 +103,18 @@ export default {
         new Doc(),
         new Text(),
         new Paragraph(),
-        new Image(),
+        new Image({
+          // 默认把图片生成 base64
+          // 字符串和内容存储在一起,如果需要自定义图片上传
+          uploadRequest (file) {
+            const fd = new FormData()
+            fd.append('image', file)
+            return uploadImage(fd).then(res => {
+              return res.data.data.url
+            })
+          }
+          // 图片上传方法 返回一个 Promise<url>
+        }),
         new Heading({ level: 3 }),
         new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
         new Underline(),
@@ -115,7 +129,9 @@ export default {
         new Fullscreen(),
         new Preview(),
         new FontType(),
-        new CodeBlock()
+        new CodeBlock(),
+        new TextColor(),
+        new TextHighlight()
       ]
     }
   },
