@@ -4,15 +4,15 @@
   <div slot="header" class="clearfix">
     <el-breadcrumb separator-class="el-icon-arrow-right">
   <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-  <el-breadcrumb-item>发布文章</el-breadcrumb-item>
+  <el-breadcrumb-item>{{ $route.query.id ? '修改文章' : '发布文章' }}</el-breadcrumb-item>
 </el-breadcrumb>
   </div>
   <div class="text item">
-<el-form :model="article" :rules="rules" ref="article" label-width="100px">
+<el-form :model="article" :rules="rules" ref="publish-from" label-width="100px">
   <el-form-item label="标题" prop="title">
     <el-input v-model="article.title"></el-input>
   </el-form-item>
-  <el-form-item label="内容" prop="content">
+  <el-form-item label="内容" prop="content" >
     <el-tiptap placeholder="请输入文章内容" height="300" v-model="article.content" :extensions="extensions"></el-tiptap>
   </el-form-item>
     <el-form-item label="封面" prop="cover">
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getArticleChannels, addArticle, getArticle } from '@/APi/article'
+import { getArticleChannels, addArticle, getArticle, updateArticle } from '@/APi/article'
 import {
   ElementTiptap,
   Doc,
@@ -90,13 +90,22 @@ export default {
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+          { min: 5, max: 30, message: '长度在 5 到 30 个字符', trigger: 'blur' }
         ],
         channel_id: [
-          { required: true, message: '请选择', trigger: 'change' }
+          { required: true, message: '请选择' }
         ],
         content: [
-          { required: true, message: '请填写内容', trigger: 'blur' }
+          {
+            validator (rule, value, callback) {
+              if (value === '<p></p>') {
+                callback(new Error('请输入文章内容'))
+              } else {
+                callback()
+              }
+            }
+          }
+          // { required: true, message: '请填写内容', trigger: 'change' }
         ]
       },
       extensions: [
@@ -153,13 +162,24 @@ export default {
       })
     },
     onPublish (draft = false) {
-      addArticle(this.article, draft).then(res => {
-        console.log(res)
-        this.$message({
-          message: '成功',
-          type: 'success'
+      const articleId = this.$route.query.id
+      if (articleId) {
+        updateArticle(articleId, this.article, draft).then(res => {
+          this.$message({
+            message: `${draft ? '存入草稿' : '发布'}成功`,
+            type: 'success'
+          })
+          this.$router.push('/article')
         })
-      })
+      } else {
+        addArticle(this.article, draft).then(res => {
+          this.$message({
+            message: `${draft ? '存入草稿' : '发布'}成功`,
+            type: 'success'
+          })
+          this.$router.push('/article')
+        })
+      }
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
