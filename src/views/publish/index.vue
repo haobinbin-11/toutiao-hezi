@@ -8,7 +8,7 @@
 </el-breadcrumb>
   </div>
   <div class="text item">
-<el-form :model="article" :rules="rules" ref="publish-from" label-width="100px">
+<el-form :model="article" :rules="rules" ref="publish-form" label-width="100px">
   <el-form-item label="标题" prop="title">
     <el-input v-model="article.title"></el-input>
   </el-form-item>
@@ -93,7 +93,7 @@ export default {
           { min: 5, max: 30, message: '长度在 5 到 30 个字符', trigger: 'blur' }
         ],
         channel_id: [
-          { required: true, message: '请选择' }
+          { required: true, message: '请选择文章频道' }
         ],
         content: [
           {
@@ -104,8 +104,8 @@ export default {
                 callback()
               }
             }
-          }
-          // { required: true, message: '请填写内容', trigger: 'change' }
+          },
+          { required: true, message: '请填写文章内容', trigger: 'blur' }
         ]
       },
       extensions: [
@@ -162,24 +162,29 @@ export default {
       })
     },
     onPublish (draft = false) {
-      const articleId = this.$route.query.id
-      if (articleId) {
-        updateArticle(articleId, this.article, draft).then(res => {
-          this.$message({
-            message: `${draft ? '存入草稿' : '发布'}成功`,
-            type: 'success'
+      this.$refs['publish-form'].validate(valid => {
+        if (!valid) {
+          return
+        }
+        const articleId = this.$route.query.id
+        if (articleId) {
+          updateArticle(articleId, this.article, draft).then(res => {
+            this.$message({
+              message: `${draft ? '存入草稿' : '发布'}成功`,
+              type: 'success'
+            })
+            this.$router.push('/article')
           })
-          this.$router.push('/article')
-        })
-      } else {
-        addArticle(this.article, draft).then(res => {
-          this.$message({
-            message: `${draft ? '存入草稿' : '发布'}成功`,
-            type: 'success'
+        } else {
+          addArticle(this.article, draft).then(res => {
+            this.$message({
+              message: `${draft ? '存入草稿' : '发布'}成功`,
+              type: 'success'
+            })
+            this.$router.push('/article')
           })
-          this.$router.push('/article')
-        })
-      }
+        }
+      })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
