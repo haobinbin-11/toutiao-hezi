@@ -7,11 +7,24 @@
   <el-breadcrumb-item>素材管理</el-breadcrumb-item>
 </el-breadcrumb>
   </div>
-  <div style="padding-bottom: 20px;">
-      <el-radio-group v-model="radio1" size="mini">
-      <el-radio-button label="全部"></el-radio-button>
-      <el-radio-button label="收藏"></el-radio-button>
+  <div class="action-head">
+    <el-radio-group
+       v-model="collect"
+       size="mini"
+       @change="onCollectChange"
+    >
+      <el-radio-button
+            :label="false"
+          >全部</el-radio-button>
+          <el-radio-button
+            :label="true"
+          >收藏</el-radio-button>
     </el-radio-group>
+    <el-button
+          size="mini"
+          type="success"
+        >上传素材</el-button>
+    </div>
           <el-row :gutter="10">
         <el-col :xs="12" :sm="6" :md="6" :lg="4" v-for="(img, index) in images" :key="index">
           <el-image
@@ -21,7 +34,6 @@
           ></el-image>
         </el-col>
       </el-row>
-  </div>
 </el-card>
   </div>
 </template>
@@ -34,23 +46,32 @@ export default {
   props: {},
   data () {
     return {
-      radio1: '全部',
+      collect: false,
       images: []
     }
   },
   computed: {},
   watch: {},
   created () {
-    this.loadImages()
+    this.loadImages(false)
   },
   mounted () {},
   methods: {
-    loadImages () {
-      getImages().then(res => {
+    loadImages (collect = false) {
+      getImages({ collect }).then(res => {
         this.images = res.data.data.results
       })
+    },
+    onCollectChange (value) {
+      this.loadImages(value)
     }
   }
 }
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.action-head {
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
