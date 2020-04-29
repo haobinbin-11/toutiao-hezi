@@ -11,7 +11,8 @@
     <el-radio-group
        v-model="collect"
        size="mini"
-       @change="onCollectChange"
+       :total="1000"
+       @change="loadImages(1)"
     >
       <el-radio-button
             :label="false"
@@ -27,14 +28,22 @@
         >上传素材</el-button>
     </div>
           <el-row :gutter="10">
-        <el-col :xs="12" :sm="6" :md="6" :lg="4" v-for="(img, index) in images" :key="index">
+        <el-col :xs="10" :sm="5" :md="5" :lg="4" v-for="(img, index) in images" :key="index">
           <el-image
-            style="height: 100px"
+            class="image_ys"
             :src="img.url"
             fit="cover"
           ></el-image>
         </el-col>
       </el-row>
+      <el-pagination
+  background
+  layout="prev, pager, next"
+  :total="totalCount"
+  :page-size="pageSize"
+  @current-change="onPageChange">
+</el-pagination>
+
 </el-card>
 <el-dialog
       title="上传素材"
@@ -70,6 +79,8 @@ export default {
     return {
       collect: false,
       images: [],
+      totalCount: 0, // 总数据条数
+      pageSize: 10, // 每页大小
       dialogUploadVisible: false,
       uploadHeaders: {
         Authorization: `Bearer ${user.token}`
@@ -79,24 +90,31 @@ export default {
   computed: {},
   watch: {},
   created () {
-    this.loadImages(false)
+    // 页面初始化第一页数据
+    this.loadImages(1)
   },
   mounted () {},
   methods: {
-    loadImages (collect = false) {
-      getImages({ collect }).then(res => {
+    // 有默认值的参数必须作为最后一个参数
+    loadImages (page) {
+      getImages({ collect: this.collect, page, per_page: this.pageSize }).then(res => {
         this.images = res.data.data.results
+        this.totalCount = res.data.data.total_count
       })
     },
-    onCollectChange (value) {
-      this.loadImages(value)
-    },
+    // onCollectChange () {
+    //   this.loadImages(1)
+    // },
     onUploadSuccess () {
       // 关闭对话框
       this.dialogUploadVisible = false
 
       // 更新素材列表
-      this.loadImages(false)
+      this.loadImages(1)
+    },
+    onPageChange (page) {
+      // console.log(page)
+      this.loadImages(page)
     }
   }
 }
@@ -106,5 +124,9 @@ export default {
   padding-bottom: 20px;
   display: flex;
   justify-content: space-between;
+}
+.image_ys {
+  height: 200px;
+  margin: 0 10px 10px 0;
 }
 </style>
