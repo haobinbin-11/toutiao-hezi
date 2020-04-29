@@ -31,12 +31,16 @@
         >上传素材</el-button>
     </div>
           <el-row :gutter="10">
-        <el-col :xs="10" :sm="5" :md="5" :lg="4" v-for="(img, index) in images" :key="index">
+        <el-col :xs="12" :sm="6" :md="6" :lg="4" v-for="(img, index) in images" :key="index" class="image-item">
           <el-image
             class="image_ys"
             :src="img.url"
             fit="cover"
           ></el-image>
+          <div class="image-action">
+            <i class="el-icon-star-off"></i>
+            <i class="el-icon-delete"></i>
+          </div>
         </el-col>
       </el-row>
       <el-pagination
@@ -116,7 +120,11 @@ export default {
       this.dialogUploadVisible = false
 
       // 更新素材列表
-      this.loadImages(1)
+      this.loadImages(this.page)
+      this.$message({
+        type: 'success',
+        message: '上传成功'
+      })
     },
     onPageChange (page) {
       // console.log(page)
@@ -134,5 +142,20 @@ export default {
 .image_ys {
   height: 200px;
   margin: 0 10px 10px 0;
+}
+.image-action{
+  height: 40px;
+  background-color:rgba(204, 204, 204, .5);
+  position: absolute;
+  bottom: 14px;
+  left: 5px;
+  right: 15px;
+  font-size: 25px;
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+}
+.image-item{
+  position: relative;
 }
 </style>
