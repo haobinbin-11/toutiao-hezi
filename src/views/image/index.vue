@@ -37,8 +37,20 @@
             :src="img.url"
             fit="cover"
           ></el-image>
+          <!-- class 样式绑定
+          {
+              css类名: 布尔值
+          }
+          true: 作用类名
+          false: 不作用类名
+          -->
           <div class="image-action">
-            <i class="el-icon-star-off"></i>
+            <i :class="{
+              'el-icon-star-on': img.is_collected,
+              'el-icon-star-off': !img.is_collected,
+            }"
+            @click="onCollect(img)"
+            ></i>
             <i class="el-icon-delete"></i>
           </div>
         </el-col>
@@ -77,7 +89,7 @@
 </template>
 
 <script>
-import { getImages } from '@/APi/image'
+import { getImages, collectImage } from '@/APi/image'
 export default {
   name: 'ImageIndex',
   components: {},
@@ -129,6 +141,16 @@ export default {
     onPageChange (page) {
       // console.log(page)
       this.loadImages(page)
+    },
+    onCollect (img) {
+      // 已收藏, 取消收藏
+      // if (img.is_collected) {
+      //   collectImage(img.id, )
+      // }
+      collectImage(img.id, !img.is_collected).then(res => {
+        img.is_collected = !img.is_collected
+      })
+      //  没有收藏, 添加收藏
     }
   }
 }
