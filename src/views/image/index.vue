@@ -14,6 +14,9 @@
        :total="1000"
        @change="loadImages(1)"
     >
+    <!-- 分页数据改变以后, 页码不会发生改变
+          需要单独处理高亮的页码
+    -->
       <el-radio-button
             :label="false"
           >全部</el-radio-button>
@@ -41,6 +44,7 @@
   layout="prev, pager, next"
   :total="totalCount"
   :page-size="pageSize"
+  :current-page.sync="page"
   @current-change="onPageChange">
 </el-pagination>
 
@@ -79,6 +83,7 @@ export default {
     return {
       collect: false,
       images: [],
+      page: 1, // 当前页码
       totalCount: 0, // 总数据条数
       pageSize: 10, // 每页大小
       dialogUploadVisible: false,
@@ -96,7 +101,8 @@ export default {
   mounted () {},
   methods: {
     // 有默认值的参数必须作为最后一个参数
-    loadImages (page) {
+    loadImages (page = 1) {
+      this.page = page
       getImages({ collect: this.collect, page, per_page: this.pageSize }).then(res => {
         this.images = res.data.data.results
         this.totalCount = res.data.data.total_count
