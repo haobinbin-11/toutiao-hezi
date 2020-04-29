@@ -54,13 +54,20 @@
           size="small"
           @click="onCollect(img)"
           ></el-button>
+          <el-button type="danger"
+          size="small"
+          icon="el-icon-delete"
+          @click="onDelete(img)"
+          :loading="img.loading"
+          circle
+          ></el-button>
           <!-- <i :class="{
               'el-icon-star-on': img.is_collected,
               'el-icon-star-off': !img.is_collected,
             }"
             @click="onCollect(img)"
             ></i> -->
-            <i class="el-icon-delete"></i>
+            <!-- <i class="el-icon-delete"></i> -->
           </div>
         </el-col>
       </el-row>
@@ -98,7 +105,7 @@
 </template>
 
 <script>
-import { getImages, collectImage } from '@/APi/image'
+import { getImages, collectImage, deleteImage } from '@/APi/image'
 export default {
   name: 'ImageIndex',
   components: {},
@@ -110,7 +117,7 @@ export default {
       images: [],
       page: 1, // 当前页码
       totalCount: 0, // 总数据条数
-      pageSize: 10, // 每页大小
+      pageSize: 12, // 每页大小
       dialogUploadVisible: false,
       uploadHeaders: {
         Authorization: `Bearer ${user.token}`
@@ -168,6 +175,18 @@ export default {
         //  没有收藏, 添加收藏
         img.is_collected = !img.is_collected
         // 关闭loading
+        img.loading = false
+      })
+    },
+    onDelete (img) {
+      // 找到数据接口
+      // 封装请求方法
+      // 请求调用
+      // 处理结果
+      img.loading = true
+      deleteImage(img.id).then(res => {
+        // 重新加载数据列表
+        this.loadImages(this.page)
         img.loading = false
       })
     }
