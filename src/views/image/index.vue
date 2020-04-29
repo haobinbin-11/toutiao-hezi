@@ -45,12 +45,21 @@
           false: 不作用类名
           -->
           <div class="image-action">
-            <i :class="{
+            <el-button
+          type="warning"
+          :icon="img.is_collected ? 'el-icon-star-on'
+          : 'el-icon-star-off'"
+          circle
+          :loading="img.loading"
+          size="small"
+          @click="onCollect(img)"
+          ></el-button>
+          <!-- <i :class="{
               'el-icon-star-on': img.is_collected,
               'el-icon-star-off': !img.is_collected,
             }"
             @click="onCollect(img)"
-            ></i>
+            ></i> -->
             <i class="el-icon-delete"></i>
           </div>
         </el-col>
@@ -120,7 +129,13 @@ export default {
     loadImages (page = 1) {
       this.page = page
       getImages({ collect: this.collect, page, per_page: this.pageSize }).then(res => {
-        this.images = res.data.data.results
+        const results = res.data.data.results
+        results.forEach(img => {
+          // img对象本来没有 loading数据
+          // 收到添加 控制每个收藏按钮的loading状态
+          img.loading = false
+        })
+        this.images = results
         this.totalCount = res.data.data.total_count
       })
     },
@@ -143,14 +158,18 @@ export default {
       this.loadImages(page)
     },
     onCollect (img) {
+      // 展示loading
+      img.loading = true
       // 已收藏, 取消收藏
       // if (img.is_collected) {
       //   collectImage(img.id, )
       // }
       collectImage(img.id, !img.is_collected).then(res => {
+        //  没有收藏, 添加收藏
         img.is_collected = !img.is_collected
+        // 关闭loading
+        img.loading = false
       })
-      //  没有收藏, 添加收藏
     }
   }
 }
