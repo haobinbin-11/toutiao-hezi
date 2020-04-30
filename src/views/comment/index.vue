@@ -39,7 +39,7 @@
 <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage4"
+      :current-page="1"
       :page-sizes="[100, 200, 300, 400]"
       :page-size="100"
       layout="total, sizes, prev, pager, next, jumper"
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { getArticles } from '@/APi/article'
 export default {
   name: 'CommentIndex',
   components: {},
@@ -73,19 +74,27 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      }],
+      articles: [] // 文章数据列表
     }
   },
   computed: {},
   watch: {},
-  created () {},
+  created () {
+    this.loadArticles()
+  },
   mounted () {},
   methods: {
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+    },
+    loadArticles () {
+      getArticles({
+        response_type: 'comment'
+      }).then(res => {
+        this.articles = res.data.data.results
+      })
     }
   }
 }
