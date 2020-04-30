@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column
         prop="comment_status"
-        label="状态">
+        label="评论状态">
         <!-- 自定义表格列 -->
         <template slot-scope="scope">
         {{ scope.row.comment_status ? '正常' : '关闭' }}
@@ -42,8 +42,10 @@
         <!-- 自定义表格列 -->
         <template slot-scope="scope">
         <el-switch
+        @change="onStatusChange(scope.row)"
         v-model="scope.row.comment_status"
         active-color="#13ce66"
+        :disabled="scope.row.statusDisabled"
         inactive-color="#ff4949">
         </el-switch>
         </template>
@@ -51,8 +53,6 @@
     </el-table>
     <!-- 分页 -->
 <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
       :current-page="1"
       :page-sizes="[100, 200, 300, 400]"
       :page-size="100"
@@ -65,30 +65,13 @@
 </template>
 
 <script>
-import { getArticles } from '@/APi/article'
+import { getArticles, updateCommentStatus } from '@/APi/article'
 export default {
   name: 'CommentIndex',
   components: {},
   props: {},
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
       articles: [] // 文章数据列表
     }
   },
@@ -99,15 +82,26 @@ export default {
   },
   mounted () {},
   methods: {
-    handleSizeChange (val) {
-    },
-    handleCurrentChange (val) {
-    },
     loadArticles () {
       getArticles({
         response_type: 'comment'
       }).then(res => {
-        this.articles = res.data.data.results
+        const { results } = res.data.data
+        results.forEach(article => {
+          article.statusDisabled = false
+        })
+        this.articles = results
+      })
+    },
+    onStatusChange (article) {
+      // 禁用开关
+      article.statusDisabled = true
+      // 请求提交修改
+      updateCommentStatus(article.id.toString(), article
+        .comment_status).then(res => {
+        // 刷新页面
+        // 启用开关
+        article.statusDisabled = false
       })
     }
   }
