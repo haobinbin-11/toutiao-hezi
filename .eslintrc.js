@@ -14,8 +14,11 @@ module.exports = {
   },
   // 自定义代码校验规范
   rules: {
+    // process.env.NODE_ENV === 'production' 是来判断代码运行环境的
+    // production 生产环境(发布环境)
+    // development 开发环境
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-    // 'no-unused-Vars': 'off', // 把规则关掉
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-unused-vars': process.env.NODE_ENV === 'production' ? 'warn' : 'off' // 把规则关掉
   }
 }

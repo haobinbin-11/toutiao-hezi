@@ -22,4 +22,12 @@ export const getUserProfile = () => {
     // 属性值: Bearer空格token数据
   })
 }
-// 修改用户信息
+// 修改用户头像
+// 注意 data 必须传递 formdata对象
+export const updateUserPhoto = data => {
+  return request({
+    method: 'PATCH',
+    url: '/mp/v1_0/user/photo',
+    data
+  })
+}
