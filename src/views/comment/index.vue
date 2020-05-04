@@ -51,13 +51,22 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
+    <!-- 分页
+    使用步骤:
+            绑定页码
+            绑定每页大小
+            current-page 控制激活的页码 初始1
+            page-sizes 控制可选的每页大小
+            page-size 控制一页多大
+    -->
 <el-pagination
-      :current-page="1"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="page"
+      :page-sizes="[10, 20, 30, 40, 50, 100]"
+      :page-size.sync="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
+      :total="totalCount"
       background
 ></el-pagination>
 </el-card>
@@ -72,7 +81,10 @@ export default {
   props: {},
   data () {
     return {
-      articles: [] // 文章数据列表
+      articles: [], // 文章数据列表
+      totalCount: 0, // 总数据 条数
+      pageSize: 10,
+      page: 1 // 当前激活的页码
     }
   },
   computed: {},
@@ -82,15 +94,27 @@ export default {
   },
   mounted () {},
   methods: {
-    loadArticles () {
+    handleSizeChange () {
+      this.loadArticles(1)
+    },
+    handleCurrentChange (page) {
+      // 页码改变加载指定页码数据
+      this.loadArticles(page)
+    },
+    loadArticles (page = 1) {
+      // 让分页组件激活的页码和请求数据的页码保持一致
+      this.page = page
       getArticles({
-        response_type: 'comment'
+        response_type: 'comment',
+        page,
+        per_page: this.pageSize
       }).then(res => {
         const { results } = res.data.data
         results.forEach(article => {
           article.statusDisabled = false
         })
         this.articles = results
+        this.totalCount = res.data.data.total_count
       })
     },
     onStatusChange (article) {
@@ -102,6 +126,10 @@ export default {
         // 刷新页面
         // 启用开关
         article.statusDisabled = false
+        this.$message({
+          type: 'success',
+          message: article.comment_status ? '开启成功' : '关闭成功'
+        })
       })
     }
   }
